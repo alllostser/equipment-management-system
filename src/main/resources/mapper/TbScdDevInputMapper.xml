@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.equipment.management.mapper.TbScdDevInputMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.equipment.management.entity.TbScdDevInput">
+        <id column="id" property="id" />
+        <result column="input_no" property="inputNo" />
+        <result column="bar_code" property="barCode" />
+        <result column="dev_name" property="devName" />
+        <result column="cate_id" property="cateId" />
+        <result column="model_no" property="modelNo" />
+        <result column="standard" property="standard" />
+        <result column="price" property="price" />
+        <result column="country_id" property="countryId" />
+        <result column="firm" property="firm" />
+        <result column="out_firm_no" property="outFirmNo" />
+        <result column="purchase_time" property="purchaseTime" />
+        <result column="found_id" property="foundId" />
+        <result column="origin_id" property="originId" />
+        <result column="deposit_id" property="depositId" />
+        <result column="dev_num" property="devNum" />
+        <result column="deal_emp" property="dealEmp" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="modify_time" property="modifyTime" />
+        <result column="create_emp" property="createEmp" />
+        <result column="modify_emp" property="modifyEmp" />
+        <result column="is_valid" property="isValid" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, input_no, bar_code, dev_name, cate_id, model_no, standard, price, country_id, firm, out_firm_no, purchase_time, found_id, origin_id, deposit_id, dev_num, deal_emp, remark, create_time, modify_time, create_emp, modify_emp, is_valid
+    </sql>
+
+</mapper>

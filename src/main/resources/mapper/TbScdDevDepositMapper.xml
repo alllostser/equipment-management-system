@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.equipment.management.mapper.TbScdDevDepositMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.equipment.management.entity.TbScdDevDeposit">
+        <id column="id" property="id" />
+        <result column="dev_deposit_no" property="devDepositNo" />
+        <result column="dev_deposit_name" property="devDepositName" />
+        <result column="create_time" property="createTime" />
+        <result column="modify_time" property="modifyTime" />
+        <result column="create_emp" property="createEmp" />
+        <result column="modify_emp" property="modifyEmp" />
+        <result column="is_valid" property="isValid" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, dev_deposit_no, dev_deposit_name, create_time, modify_time, create_emp, modify_emp, is_valid
+    </sql>
+
+</mapper>

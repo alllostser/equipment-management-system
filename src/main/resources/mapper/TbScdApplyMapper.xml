@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.equipment.management.mapper.TbScdApplyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.equipment.management.entity.TbScdApply">
+        <id column="id" property="id" />
+        <result column="apply_no" property="applyNo" />
+        <result column="apply_emp" property="applyEmp" />
+        <result column="status" property="status" />
+        <result column="deal_emp" property="dealEmp" />
+        <result column="remark" property="remark" />
+        <result column="apply_time" property="applyTime" />
+        <result column="deal_time" property="dealTime" />
+        <result column="create_time" property="createTime" />
+        <result column="modify_time" property="modifyTime" />
+        <result column="create_emp" property="createEmp" />
+        <result column="modify_emp" property="modifyEmp" />
+        <result column="is_valid" property="isValid" />
+        <result column="deal_text" property="dealText" />
+        <result column="apply_text" property="applyText" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, apply_no, apply_emp, status, deal_emp, remark, apply_time, deal_time, create_time, modify_time, create_emp, modify_emp, is_valid, deal_text, apply_text
+    </sql>
+
+</mapper>

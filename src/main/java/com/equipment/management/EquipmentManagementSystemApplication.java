@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.equipment.management.dao")
+@MapperScan("com.equipment.management.mapper")
 public class EquipmentManagementSystemApplication {
 
     public static void main(String[] args) {
