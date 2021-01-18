@@ -15,14 +15,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 /**
  * @ClassName WebSecurityConfig
  * @Description //TODO
- * @Author GuXinYu
  * @Date 2021/1/11 23:23
  * @Version 1.0
  **/
 @Configurable
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-public class       WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
