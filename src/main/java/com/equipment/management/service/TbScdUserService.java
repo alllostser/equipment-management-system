@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.equipment.management.entity.TbScdUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 服务类
@@ -22,4 +24,11 @@ public interface TbScdUserService extends IService<TbScdUser> {
      * @return
      */
     IPage listPage(Page page, TbScdUser user);
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    int deleteByIds(List<String> ids);
 }

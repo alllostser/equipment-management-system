@@ -1,7 +1,11 @@
 package com.equipment.management.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.equipment.management.entity.TbScdDevCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.equipment.management.entity.dto.TbScdDevCategoryDto;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface TbScdDevCategoryMapper extends BaseMapper<TbScdDevCategory> {
 
+    /**
+     * 获取分类下所有子类
+     * @param parentId
+     * @return
+     */
+    List<TbScdDevCategoryDto> selectList2(Integer parentId);
 }

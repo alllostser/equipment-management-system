@@ -28,6 +28,11 @@ public class TbScdDevCategory implements Serializable {
     private Integer id;
 
     /**
+     * 父类id
+     */
+    private Integer parentId;
+
+    /**
      * 类别号
      */
     private String cateNo;

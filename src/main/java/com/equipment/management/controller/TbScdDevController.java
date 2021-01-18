@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-01-15
  */
 @RestController
-@RequestMapping("/tb-scd-dev")
+@RequestMapping("/dev")
 public class TbScdDevController {
 
 }

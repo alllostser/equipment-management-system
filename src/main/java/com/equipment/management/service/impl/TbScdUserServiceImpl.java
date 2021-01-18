@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 服务实现类
@@ -31,5 +33,15 @@ public class TbScdUserServiceImpl extends ServiceImpl<TbScdUserMapper, TbScdUser
     @Override
     public IPage<TbScdUser> listPage(Page page, TbScdUser user) {
         return tbScdUserMapper.listPage(page,user);
+    }
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @Override
+    public int deleteByIds(List<String> ids) {
+        return tbScdUserMapper.deleteBatchIds(ids);
     }
 }
