@@ -46,5 +46,8 @@ public class TbScdDevCategoryController {
         List<TbScdDevCategoryDto> tbScdDevCategoryDtoList = tbScdDevCategoryService.listByParentId(id);
         return R.ok(tbScdDevCategoryDtoList);
     }
-}
 
+    public R addCategory(Integer parentId){
+        return null;
+    }
+}
