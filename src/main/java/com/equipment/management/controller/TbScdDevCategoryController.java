@@ -2,13 +2,11 @@ package com.equipment.management.controller;
 
 
 import com.baomidou.mybatisplus.extension.api.R;
+import com.equipment.management.entity.TbScdDevCategory;
 import com.equipment.management.entity.dto.TbScdDevCategoryDto;
 import com.equipment.management.service.TbScdDevCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,7 +45,14 @@ public class TbScdDevCategoryController {
         return R.ok(tbScdDevCategoryDtoList);
     }
 
-    public R addCategory(Integer parentId){
-        return null;
+    /**
+     * 添加分类
+     * @param tbScdDevCategory
+     * @return
+     */
+    @PostMapping("/add")
+    public R addCategory(@RequestBody TbScdDevCategory tbScdDevCategory){
+        boolean save = tbScdDevCategoryService.save(tbScdDevCategory);
+        return R.ok(save);
     }
 }
