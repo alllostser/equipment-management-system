@@ -35,4 +35,22 @@
         id, dev_no, bar_code, dev_name, cate_id, model_no, standard, price, country_id, firm, out_firm_no, purchase_time, found_id, origin_id, deposit_id, dev_sum, remark, create_time, modify_time, create_emp, modify_emp, is_valid, dev_power, direc_id
     </sql>
 
+    <select id="getPageList" resultType="com.equipment.management.entity.TbScdDev">
+        select <include refid="Base_Column_List"/> from tb_scd_dev
+        <where>
+            <if test="tbScdDev.devName !=null and tbScdDev.devName!=''">
+                dev_name like CONCAT('%',#{tbScdDev.devName},'%')
+            </if>
+            <if test="tbScdDev.cateId !=null and tbScdDev.cateId!=''">
+                and cate_id = #{tbScdDev.cateId}
+            </if>
+            <if test="tbScdDev.devNo!=null and tbScdDev.devNo!=''">
+                and dev_no like CONCAT('%',#{tbScdDev.devNo},'%')
+            </if>
+            <if test="tbScdDev.modelNo!=null and tbScdDev.modelNo!=''">
+                and model_no = #{tbScdDev.modelNo}
+            </if>
+        </where>
+    </select>
+
 </mapper>

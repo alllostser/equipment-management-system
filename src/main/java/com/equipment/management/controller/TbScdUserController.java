@@ -81,6 +81,5 @@ public class TbScdUserController {
          int delete = tbScdUserService.deleteByIds(asids);
          return R.ok(delete);
     }
-
 }
 
