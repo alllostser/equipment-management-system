@@ -4,6 +4,7 @@ package com.equipment.management.controller;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.equipment.management.entity.TbScdDev;
+import com.equipment.management.entity.vo.TbscdApplyVO;
 import com.equipment.management.service.TbScdDevService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ import java.util.Arrays;
 public class TbScdDevController {
     @Autowired
     private TbScdDevService tbScdDevService;
+
 
     /**
      * 获取设备列表
@@ -51,6 +53,7 @@ public class TbScdDevController {
      * @param ids
      * @return
      */
+    @DeleteMapping("/delete")
     public R delDev(String ids){
         boolean b = tbScdDevService.removeByIds(Arrays.asList(ids));
         return R.ok(b);
@@ -66,8 +69,16 @@ public class TbScdDevController {
         boolean b = tbScdDevService.updateById(tbScdDev);
         return R.ok(b);
     }
-//
-//    public R devApplication(){
-//    }
+
+    /**
+     * 设备申请
+     * @param tbscdApplyVO
+     * @return
+     */
+    @PostMapping("/application")
+    public R devApplication(TbscdApplyVO tbscdApplyVO){
+        R response = tbScdDevService.devApplication(tbscdApplyVO);
+        return response;
+    }
 }
 

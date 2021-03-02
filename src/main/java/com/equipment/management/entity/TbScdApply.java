@@ -35,7 +35,7 @@ public class TbScdApply implements Serializable {
     private Long applyEmp;
 
     /**
-     * 申请状态
+     * 申请状态 0待审核 ， 1已通过，2未通过
      */
     private Integer status;
 
