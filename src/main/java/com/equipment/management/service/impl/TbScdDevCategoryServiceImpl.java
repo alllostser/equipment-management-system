@@ -3,6 +3,7 @@ package com.equipment.management.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.equipment.management.entity.TbScdDevCategory;
 import com.equipment.management.entity.dto.TbScdDevCategoryDto;
+import com.equipment.management.entity.vo.TbScdDevCategoryVO;
 import com.equipment.management.mapper.TbScdDevCategoryMapper;
 import com.equipment.management.service.TbScdDevCategoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -32,16 +33,16 @@ public class TbScdDevCategoryServiceImpl extends ServiceImpl<TbScdDevCategoryMap
      * @return
      */
     @Override
-    public List<TbScdDevCategoryDto> getCategoryList() {
+    public List<TbScdDevCategoryVO> getCategoryList() {
         List<TbScdDevCategory> tbScdDevCategories = baseMapper.selectList(new LambdaQueryWrapper<TbScdDevCategory>().eq(TbScdDevCategory::getParentId,0));
-        List<TbScdDevCategoryDto> devCategoryDtoList = new ArrayList<>();
+        List<TbScdDevCategoryVO> devCategoryDtoList = new ArrayList<>();
         //pojp转dto
         tbScdDevCategories.forEach(dct-> {
-            TbScdDevCategoryDto dto = new TbScdDevCategoryDto();
-            BeanUtils.copyProperties(dct,dto);
-            devCategoryDtoList.add(dto);
+            TbScdDevCategoryVO vo = new TbScdDevCategoryVO();
+            BeanUtils.copyProperties(dct,vo);
+            devCategoryDtoList.add(vo);
         });
-        List<TbScdDevCategoryDto> categoryList2 = getCategoryList2(devCategoryDtoList);
+        List<TbScdDevCategoryVO> categoryList2 = getCategoryList2(devCategoryDtoList);
         return categoryList2;
     }
 
@@ -51,16 +52,16 @@ public class TbScdDevCategoryServiceImpl extends ServiceImpl<TbScdDevCategoryMap
      * @return
      */
     @Override
-    public List<TbScdDevCategoryDto> listByParentId(Integer parentId) {
+    public List<TbScdDevCategoryVO> listByParentId(Integer parentId) {
         List<TbScdDevCategory> tbScdDevCategories = baseMapper.selectList(new LambdaQueryWrapper<TbScdDevCategory>().eq(TbScdDevCategory::getId, parentId));
-        List<TbScdDevCategoryDto> devCategoryDtoList = new ArrayList<>();
+        List<TbScdDevCategoryVO> devCategoryDtoList = new ArrayList<>();
         //pojp转dto
         tbScdDevCategories.forEach(dct-> {
-            TbScdDevCategoryDto dto = new TbScdDevCategoryDto();
+            TbScdDevCategoryVO dto = new TbScdDevCategoryVO();
             BeanUtils.copyProperties(dct,dto);
             devCategoryDtoList.add(dto);
         });
-        List<TbScdDevCategoryDto> categoryList2 = getCategoryList2(devCategoryDtoList);
+        List<TbScdDevCategoryVO> categoryList2 = getCategoryList2(devCategoryDtoList);
         return categoryList2;
     }
 
@@ -69,13 +70,13 @@ public class TbScdDevCategoryServiceImpl extends ServiceImpl<TbScdDevCategoryMap
      * @param list
      * @return
      */
-    private List<TbScdDevCategoryDto> getCategoryList2(List<TbScdDevCategoryDto> list){
-        for (TbScdDevCategoryDto dto : list) {
+    private List<TbScdDevCategoryVO> getCategoryList2(List<TbScdDevCategoryVO> list){
+        for (TbScdDevCategoryVO dto : list) {
             //获取该分类下所有子类
-            List<TbScdDevCategoryDto> tbScd = baseMapper.selectList2(dto.getId());
+            List<TbScdDevCategoryVO> tbScd = baseMapper.selectList2(dto.getId());
             //递归获取子类的子类
-            List<TbScdDevCategoryDto> categoryList2 = getCategoryList2(tbScd);
-            dto.setChildCategory(categoryList2);
+            List<TbScdDevCategoryVO> categoryList2 = getCategoryList2(tbScd);
+            dto.setChildren(categoryList2);
         }
         return list;
     }

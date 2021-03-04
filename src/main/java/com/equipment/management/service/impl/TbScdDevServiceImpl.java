@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.equipment.management.common.TableDataInfo;
 import com.equipment.management.entity.TbScdApplyItem;
 import com.equipment.management.entity.TbScdDev;
 import com.equipment.management.entity.vo.TbscdApplyVO;
@@ -44,9 +45,9 @@ public class TbScdDevServiceImpl extends ServiceImpl<TbScdDevMapper, TbScdDev> i
      * @return
      */
     @Override
-    public R getPageList(Page<TbScdDev> page, TbScdDev tbScdDev) {
+    public TableDataInfo getPageList(Page<TbScdDev> page, TbScdDev tbScdDev) {
         IPage iPage = tbScdDevMapper.getPageList(page,tbScdDev);
-        return R.ok(iPage);
+        return TableDataInfo.ResponseBySucess("成功",iPage.getTotal(),iPage.getRecords());
     }
 
     /**
@@ -60,6 +61,7 @@ public class TbScdDevServiceImpl extends ServiceImpl<TbScdDevMapper, TbScdDev> i
         Snowflake snowflake = IdUtil.createSnowflake(1, 1L);
         long applyNo = snowflake.nextId();
         tbscdApplyVO.setApplyNo(String.valueOf(applyNo));
+        //todo: 当前登录用户
         //TbScdUser user = (TbScdUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         tbscdApplyVO.setApplyEmp(4L);
         tbscdApplyVO.setStatus(0);

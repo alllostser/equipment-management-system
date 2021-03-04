@@ -3,6 +3,7 @@ package com.equipment.management.service;
 import com.equipment.management.entity.TbScdDevCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.equipment.management.entity.dto.TbScdDevCategoryDto;
+import com.equipment.management.entity.vo.TbScdDevCategoryVO;
 
 import java.util.List;
 
@@ -20,12 +21,12 @@ public interface TbScdDevCategoryService extends IService<TbScdDevCategory> {
      * 获取所有分类列表
      * @return
      */
-    List<TbScdDevCategoryDto> getCategoryList();
+    List<TbScdDevCategoryVO> getCategoryList();
 
     /**
      * 获取指定id下的子级菜单
      * @param parentId
      * @return
      */
-    List<TbScdDevCategoryDto> listByParentId(Integer parentId);
+    List<TbScdDevCategoryVO> listByParentId(Integer parentId);
 }

@@ -2,6 +2,7 @@ package com.equipment.management.service;
 
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.equipment.management.common.TableDataInfo;
 import com.equipment.management.entity.TbScdDev;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.equipment.management.entity.vo.TbscdApplyVO;
@@ -23,7 +24,7 @@ public interface TbScdDevService extends IService<TbScdDev> {
      * @param tbScdDev
      * @return
      */
-    R getPageList(Page<TbScdDev> page,TbScdDev tbScdDev);
+    TableDataInfo getPageList(Page<TbScdDev> page, TbScdDev tbScdDev);
 
     /**
      * 设备申请

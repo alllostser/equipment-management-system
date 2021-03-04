@@ -3,7 +3,9 @@ package com.equipment.management.controller;
 
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.equipment.management.common.TableDataInfo;
 import com.equipment.management.entity.TbScdDev;
+import com.equipment.management.entity.vo.TbScdDevVO;
 import com.equipment.management.entity.vo.TbscdApplyVO;
 import com.equipment.management.service.TbScdDevService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,20 +34,32 @@ public class TbScdDevController {
      * @return
      */
     @GetMapping("/list")
-    public R list(Page<TbScdDev> page, TbScdDev tbScdDev){
-        R response = tbScdDevService.getPageList(page,tbScdDev);
+    public TableDataInfo list(Page<TbScdDev> page, TbScdDev tbScdDev){
+        TableDataInfo response = tbScdDevService.getPageList(page,tbScdDev);
         return response;
     }
 
     /**
      * 添加设备
-     * @param tbScdDev
+     * @param tbScdDevVO
      * @return
      */
     @PostMapping("/add")
-    public R addDev(TbScdDev tbScdDev){
+    public R addDev(@RequestBody TbScdDevVO tbScdDevVO){
+        String cateIds = tbScdDevVO.getCateId();
+        String substring = cateIds.substring(cateIds.length() - 2, cateIds.length()-1);
+        System.out.println(substring);
+        TbScdDev tbScdDev = new TbScdDev();
+        tbScdDev.setDevSum(tbScdDevVO.getDevSum());
+        tbScdDev.setDevNo(tbScdDevVO.getDevNo());
+        tbScdDev.setCateId(Integer.parseInt(substring));
+        tbScdDev.setDevName(tbScdDevVO.getDevName());
+        tbScdDev.setModelNo(tbScdDevVO.getModelNo());
+        tbScdDev.setPrice(tbScdDevVO.getPrice());
+        tbScdDev.setStandard(tbScdDevVO.getStandard());
+//
         boolean save = tbScdDevService.save(tbScdDev);
-        return R.ok(save);
+        return R.ok(substring);
     }
 
     /**

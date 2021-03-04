@@ -28,7 +28,7 @@
         select <include refid="Base_Column_List"/> from tb_scd_user
             <where>
                 <if test="user.realName!=null and user.realName!=''">
-                    LOCATE(#{user.realName}, real_name);
+                    LOCATE(#{user.realName}, real_name)
                 </if>
                 <if test="user.userSex!=null and user.userSex!=''">
                     and user_sex = #{user.userSex}

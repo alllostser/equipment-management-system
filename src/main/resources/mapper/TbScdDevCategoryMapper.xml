@@ -6,7 +6,7 @@
     <resultMap id="BaseResultMap" type="com.equipment.management.entity.TbScdDevCategory">
         <id column="id" property="id" />
         <result column="cate_no" property="cateNo" />
-        <result column="cate_name" property="cateName" />
+        <result column="cate_name" property="title" />
         <result column="create_time" property="createTime" />
         <result column="modify_time" property="modifyTime" />
         <result column="create_emp" property="createEmp" />
@@ -16,10 +16,10 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, cate_no, cate_name, create_time, modify_time, create_emp, modify_emp, is_valid
+        id, cate_no, title, create_time, modify_time, create_emp, modify_emp, is_valid
     </sql>
 <!--    获取该分类下所有子类-->
-    <select id="selectList2" resultType="com.equipment.management.entity.dto.TbScdDevCategoryDto">
+    <select id="selectList2" resultType="com.equipment.management.entity.vo.TbScdDevCategoryVO">
         select <include refid="Base_Column_List"/> from tb_scd_dev_category
         where parent_id = #{parentId}
     </select>

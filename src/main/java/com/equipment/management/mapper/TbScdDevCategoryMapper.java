@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.equipment.management.entity.TbScdDevCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.equipment.management.entity.dto.TbScdDevCategoryDto;
+import com.equipment.management.entity.vo.TbScdDevCategoryVO;
 
 import java.util.List;
 
@@ -22,5 +23,5 @@ public interface TbScdDevCategoryMapper extends BaseMapper<TbScdDevCategory> {
      * @param parentId
      * @return
      */
-    List<TbScdDevCategoryDto> selectList2(Integer parentId);
+    List<TbScdDevCategoryVO> selectList2(Integer parentId);
 }

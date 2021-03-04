@@ -40,7 +40,7 @@ public class TbScdDevCategory implements Serializable {
     /**
      * 类别名称
      */
-    private String cateName;
+    private String title;
 
     private LocalDateTime createTime;
 

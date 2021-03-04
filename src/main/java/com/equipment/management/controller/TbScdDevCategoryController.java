@@ -2,8 +2,11 @@ package com.equipment.management.controller;
 
 
 import com.baomidou.mybatisplus.extension.api.R;
+import com.equipment.management.common.CategoryTableInfo;
+import com.equipment.management.common.Status;
 import com.equipment.management.entity.TbScdDevCategory;
 import com.equipment.management.entity.dto.TbScdDevCategoryDto;
+import com.equipment.management.entity.vo.TbScdDevCategoryVO;
 import com.equipment.management.service.TbScdDevCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +32,14 @@ public class TbScdDevCategoryController {
      * @return
      */
     @GetMapping("/list")
-    public R list(){
-        List<TbScdDevCategoryDto> tbScdDevCategoryDtoList = tbScdDevCategoryService.getCategoryList();
-        return R.ok(tbScdDevCategoryDtoList);
+    public CategoryTableInfo list(){
+        List<TbScdDevCategoryVO> tbScdDevCategoryDtoList = tbScdDevCategoryService.getCategoryList();
+        return CategoryTableInfo.ResponseBySucess(new Status(200,"操作成功"),tbScdDevCategoryDtoList);
+    }
+    @GetMapping("/list2")
+    public List<TbScdDevCategoryVO> list2(){
+        List<TbScdDevCategoryVO> tbScdDevCategoryDtoList = tbScdDevCategoryService.getCategoryList();
+        return tbScdDevCategoryDtoList;
     }
 
     /**
@@ -41,7 +49,7 @@ public class TbScdDevCategoryController {
      */
     @GetMapping("/listById")
     public R listByParentId(Integer id){
-        List<TbScdDevCategoryDto> tbScdDevCategoryDtoList = tbScdDevCategoryService.listByParentId(id);
+        List<TbScdDevCategoryVO> tbScdDevCategoryDtoList = tbScdDevCategoryService.listByParentId(id);
         return R.ok(tbScdDevCategoryDtoList);
     }
 
@@ -54,5 +62,16 @@ public class TbScdDevCategoryController {
     public R addCategory(@RequestBody TbScdDevCategory tbScdDevCategory){
         boolean save = tbScdDevCategoryService.save(tbScdDevCategory);
         return R.ok(save);
+    }
+
+    /**
+     * 修改分类
+     * @param tbScdDevCategory
+     * @return
+     */
+    @PostMapping("/update")
+    public R updateCateory(TbScdDevCategory tbScdDevCategory){
+        boolean b = tbScdDevCategoryService.updateById(tbScdDevCategory);
+        return R.ok(b);
     }
 }
