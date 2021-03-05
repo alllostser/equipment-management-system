@@ -21,6 +21,10 @@
 <!--    获取该分类下所有子类-->
     <select id="selectList2" resultType="com.equipment.management.entity.vo.TbScdDevCategoryVO">
         select <include refid="Base_Column_List"/> from tb_scd_dev_category
+        where parent_id = #{parentId} and is_valid=1
+    </select>
+    <select id="selectList3" resultType="com.equipment.management.entity.vo.TbScdDevCategoryVO">
+        select <include refid="Base_Column_List"/> from tb_scd_dev_category
         where parent_id = #{parentId}
     </select>
 

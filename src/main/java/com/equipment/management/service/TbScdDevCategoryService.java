@@ -29,4 +29,10 @@ public interface TbScdDevCategoryService extends IService<TbScdDevCategory> {
      * @return
      */
     List<TbScdDevCategoryVO> listByParentId(Integer parentId);
+
+    /**
+     * 管理员获取分类列表
+     * @return
+     */
+    List<TbScdDevCategoryVO> getCategoryList2();
 }

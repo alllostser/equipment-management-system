@@ -2,36 +2,46 @@ package com.equipment.management.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-
-import java.awt.font.OpenType;
-import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.List;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 系统菜单表
+ * 
  * </p>
  *
  * @author ${author}
- * @since 2021-01-15
+ * @since 2021-03-04
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class TbScdMenu implements Serializable {
+public class TbScdRole implements Serializable {
 
     private static final long serialVersionUID=1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    private String title;
-    private Integer type;
-    private String  icon;
-    private String openType;
-    private String href;
-    private List<TbScdMenu> children;
+
+    /**
+     * 角色名
+     */
+    private String role;
+
+    /**
+     * 角色
+     */
+    private String roleName;
+
+    /**
+     * 状态
+     */
+    private Integer status;
+
+    /**
+     * 描述
+     */
+    private String description;
+
 
 }

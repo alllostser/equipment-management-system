@@ -5,7 +5,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.equipment.management.common.TableDataInfo;
 import com.equipment.management.entity.TbScdDev;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.equipment.management.entity.excel.ExcelForDev;
 import com.equipment.management.entity.vo.TbscdApplyVO;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -32,4 +36,10 @@ public interface TbScdDevService extends IService<TbScdDev> {
      * @return
      */
     R devApplication(TbscdApplyVO tbscdApplyVO);
+
+    boolean deleteByIds(List<String> asList);
+
+    List<ExcelForDev> list2();
+
+    void saveList(List<ExcelForDev> list);
 }

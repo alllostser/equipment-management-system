@@ -1,6 +1,8 @@
 package com.equipment.management.entity;
 
 import java.math.BigDecimal;
+
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
@@ -28,6 +30,7 @@ public class TbScdDev implements Serializable {
     /**
      * 设备编号
      */
+    @ExcelProperty("设备编号")
     private String devNo;
 
     /**
@@ -38,26 +41,31 @@ public class TbScdDev implements Serializable {
     /**
      * 设备名称
      */
+    @ExcelProperty("设备名称")
     private String devName;
 
     /**
      * 类别id
      */
+    @ExcelProperty("类别id")
     private Integer cateId;
 
     /**
      * 型号
      */
+    @ExcelProperty("型号")
     private String modelNo;
 
     /**
      * 规格
      */
+    @ExcelProperty("规格")
     private String standard;
 
     /**
      * 单价
      */
+    @ExcelProperty("单价")
     private BigDecimal price;
 
     /**
@@ -78,7 +86,7 @@ public class TbScdDev implements Serializable {
     /**
      * 购置时间
      */
-    private LocalDateTime purchaseTime;
+//    private LocalDateTime purchaseTime;
 
     /**
      * 经费科目
@@ -98,6 +106,7 @@ public class TbScdDev implements Serializable {
     /**
      * 设备数量
      */
+    @ExcelProperty("设备数量")
     private Integer devSum;
 
     /**
@@ -105,9 +114,9 @@ public class TbScdDev implements Serializable {
      */
     private String remark;
 
-    private LocalDateTime createTime;
-
-    private LocalDateTime modifyTime;
+//    private LocalDateTime createTime;
+//
+//    private LocalDateTime modifyTime;
 
     private Long createEmp;
 

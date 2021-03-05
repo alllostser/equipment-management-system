@@ -30,10 +30,35 @@
         <result column="direc_id" property="direcId" />
     </resultMap>
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap2" type="com.equipment.management.entity.excel.ExcelForDev">
+        <result column="dev_no" property="devNo" />
+        <result column="dev_name" property="devName" />
+        <result column="cate_id" property="cateId" />
+        <result column="model_no" property="modelNo" />
+        <result column="standard" property="standard" />
+        <result column="price" property="price" />
+        <result column="dev_sum" property="devSum" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, dev_no, bar_code, dev_name, cate_id, model_no, standard, price, country_id, firm, out_firm_no, purchase_time, found_id, origin_id, deposit_id, dev_sum, remark, create_time, modify_time, create_emp, modify_emp, is_valid, dev_power, direc_id
     </sql>
+    <insert id="saveExcelForDev">
+        insert into tb_scd_dev (dev_no,dev_name,cate_id,model_no,standard,price,dev_sum) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.devNo},
+            #{item.devName},
+            #{item.cateId},
+            #{item.modelNo},
+            #{item.standard},
+            #{item.price},
+            #{item.devSum}
+            )
+        </foreach>
+    </insert>
 
     <select id="getPageList" resultType="com.equipment.management.entity.TbScdDev">
         select <include refid="Base_Column_List"/> from tb_scd_dev
@@ -51,6 +76,9 @@
                 and model_no = #{tbScdDev.modelNo}
             </if>
         </where>
+    </select>
+    <select id="list2" resultMap="BaseResultMap2">
+        select <include refid="Base_Column_List"/> from tb_scd_dev
     </select>
 
 </mapper>

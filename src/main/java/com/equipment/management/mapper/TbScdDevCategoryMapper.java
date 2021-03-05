@@ -24,4 +24,11 @@ public interface TbScdDevCategoryMapper extends BaseMapper<TbScdDevCategory> {
      * @return
      */
     List<TbScdDevCategoryVO> selectList2(Integer parentId);
+
+    /**
+     * 管理员获取分类下所有子类
+     * @param id
+     * @return
+     */
+    List<TbScdDevCategoryVO> selectList3(Integer id);
 }

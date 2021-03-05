@@ -1,17 +1,26 @@
 package com.equipment.management.controller;
 
 
+import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.equipment.management.common.TableDataInfo;
 import com.equipment.management.entity.TbScdDev;
+import com.equipment.management.entity.excel.ExcelForDev;
 import com.equipment.management.entity.vo.TbScdDevVO;
 import com.equipment.management.entity.vo.TbscdApplyVO;
+import com.equipment.management.listener.ExcelListener;
 import com.equipment.management.service.TbScdDevService;
+import com.equipment.management.utils.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>
@@ -47,7 +56,8 @@ public class TbScdDevController {
     @PostMapping("/add")
     public R addDev(@RequestBody TbScdDevVO tbScdDevVO){
         String cateIds = tbScdDevVO.getCateId();
-        String substring = cateIds.substring(cateIds.length() - 2, cateIds.length()-1);
+        String[] split = cateIds.split(",");
+        String substring = split[split.length-1];
         System.out.println(substring);
         TbScdDev tbScdDev = new TbScdDev();
         tbScdDev.setDevSum(tbScdDevVO.getDevSum());
@@ -57,7 +67,6 @@ public class TbScdDevController {
         tbScdDev.setModelNo(tbScdDevVO.getModelNo());
         tbScdDev.setPrice(tbScdDevVO.getPrice());
         tbScdDev.setStandard(tbScdDevVO.getStandard());
-//
         boolean save = tbScdDevService.save(tbScdDev);
         return R.ok(substring);
     }
@@ -69,7 +78,8 @@ public class TbScdDevController {
      */
     @DeleteMapping("/delete")
     public R delDev(String ids){
-        boolean b = tbScdDevService.removeByIds(Arrays.asList(ids));
+        List<String> asids = Arrays.asList(ids.split(","));
+        boolean b = tbScdDevService.deleteByIds(asids);
         return R.ok(b);
     }
 
@@ -93,6 +103,20 @@ public class TbScdDevController {
     public R devApplication(TbscdApplyVO tbscdApplyVO){
         R response = tbScdDevService.devApplication(tbscdApplyVO);
         return response;
+    }
+
+    //导出为Excel
+    @RequestMapping("/downloadexcel")
+    public void getExcel(HttpServletResponse response) throws IllegalAccessException, IOException,
+            InstantiationException {
+        List<ExcelForDev> list = tbScdDevService.list2();
+        ExcelUtil.download(response,ExcelForDev.class,list);
+    }
+    //导入Excel
+    @RequestMapping("/importexcel")
+    public R importexcel(@RequestParam(value = "excelFile") MultipartFile file) throws IOException{
+        EasyExcel.read(file.getInputStream(), ExcelForDev.class, new ExcelListener(tbScdDevService)).sheet().doRead();
+        return R.ok("导入成功");
     }
 }
 

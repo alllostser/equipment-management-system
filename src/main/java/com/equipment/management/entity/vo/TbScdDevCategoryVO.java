@@ -15,5 +15,6 @@ public class TbScdDevCategoryVO {
     private String title;
     private Boolean last;
     private Integer parentId;
+    private Integer isValid;
     private List<TbScdDevCategoryVO> children;
 }

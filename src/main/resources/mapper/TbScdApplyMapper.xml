@@ -21,9 +21,59 @@
         <result column="apply_text" property="applyText" />
     </resultMap>
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap2" type="com.equipment.management.entity.dto.TbScdApplyDto">
+        <id column="id" property="id" />
+        <result column="apply_no" property="applyNo" />
+        <result column="real_name" property="realName" />
+        <result column="status" property="status" />
+        <result column="deal_emp" property="dealEmp" />
+        <result column="remark" property="remark" />
+        <result column="apply_time" property="applyTime" />
+        <result column="deal_time" property="dealTime" />
+        <result column="deal_text" property="dealText" />
+        <result column="apply_text" property="applyText" />
+        <result column="dev_no" property="devNo"/>
+        <result property="devName" column="dev_name"/>
+        <result property="devNum" column="dev_num"/>
+        <result property="standard" column="standard"/>
+        <result property="userRole" column="user_role"/>
+        <result property="devId" column="dev_id"/>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, apply_no, apply_emp, status, deal_emp, remark, apply_time, deal_time, create_time, modify_time, create_emp, modify_emp, is_valid, deal_text, apply_text
     </sql>
 
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List2">
+        apply.id, apply_no,real_name,item.dev_id,user_role,status, deal_emp, apply.remark, apply_time, deal_time, deal_text, apply_text,dev_no,dev_name,dev_num,standard
+    </sql>
+    <select id="listPage" resultMap="BaseResultMap2">
+        select <include refid="Base_Column_List2"/>
+        from tb_scd_apply apply
+            left join tb_scd_apply_item item
+                on apply.id = item.apply_id
+            left join tb_scd_dev dev
+                on item.dev_id=dev.id
+            left join tb_scd_user user
+                on apply.apply_emp=user.id
+        <where>
+            <if test="applyDto.userRole != null and applyDto.userRole !=''">
+                user.user_role = #{applyDto.userRole}
+            </if>
+            <if test="applyDto.realName !=null and applyDto.realName!=''">
+               and user.real_name like CONCAT('%',#{applyDto.realName},'%')
+            </if>
+            <if test="applyDto.devName!=null and applyDto.devName!=''">
+                and dev.dev_name like CONCAT('%',#{applyDto.devName},'%')
+            </if>
+        </where>
+            order by status,apply_time desc
+    </select>
+    <update id="updateStatusById">
+        update tb_scd_apply set deal_text = #{dealText},deal_time=#{dealTime},deal_emp=#{dealEmp},status=#{status}
+        where id = #{id}
+    </update>
 </mapper>

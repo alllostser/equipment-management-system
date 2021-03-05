@@ -5,21 +5,23 @@ import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.equipment.management.common.TableDataInfo;
 import com.equipment.management.entity.TbScdApplyItem;
 import com.equipment.management.entity.TbScdDev;
+import com.equipment.management.entity.excel.ExcelForDev;
 import com.equipment.management.entity.vo.TbscdApplyVO;
 import com.equipment.management.exception.CommonException;
 import com.equipment.management.mapper.TbScdDevMapper;
 import com.equipment.management.service.TbScdApplyItemService;
 import com.equipment.management.service.TbScdApplyService;
 import com.equipment.management.service.TbScdDevService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -60,7 +62,7 @@ public class TbScdDevServiceImpl extends ServiceImpl<TbScdDevMapper, TbScdDev> i
     public R devApplication(TbscdApplyVO tbscdApplyVO) {
         Snowflake snowflake = IdUtil.createSnowflake(1, 1L);
         long applyNo = snowflake.nextId();
-        tbscdApplyVO.setApplyNo(String.valueOf(applyNo));
+        tbscdApplyVO.setApplyNo("AP"+String.valueOf(applyNo).substring(0,7));
         //todo: 当前登录用户
         //TbScdUser user = (TbScdUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         tbscdApplyVO.setApplyEmp(4L);
@@ -81,11 +83,31 @@ public class TbScdDevServiceImpl extends ServiceImpl<TbScdDevMapper, TbScdDev> i
         if (tbscdApplyVO.getDevNum()>tbScdDev.getDevSum()){
             throw new CommonException(501,"该设备数量不足");
         }
-        tbScdDev.setDevSum(tbScdDev.getDevSum()-tbscdApplyVO.getDevNum());
+        //tbScdDev.setDevSum(tbScdDev.getDevSum()-tbscdApplyVO.getDevNum());
         int i = tbScdDevMapper.updateById(tbScdDev);
         if (i<=0){
             return R.failed("申请失败");
         }
         return R.ok(true);
+    }
+
+    @Override
+    public boolean deleteByIds(List<String> asList) {
+        int i = baseMapper.deleteBatchIds(asList);
+        if (i<=0){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public List<ExcelForDev> list2() {
+        List<ExcelForDev> excelForDevs = baseMapper.list2();
+        return excelForDevs;
+    }
+
+    @Override
+    public void saveList(List<ExcelForDev> list) {
+            int result = baseMapper.saveExcelForDev(list);
     }
 }

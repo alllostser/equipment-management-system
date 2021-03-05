@@ -28,7 +28,7 @@ public class TableDataInfo<T> {
 
     public TableDataInfo() {
     }
-    public TableDataInfo(Integer code, String msg, long count, T data) {
+    public TableDataInfo(Integer code, String msg, Long count, T data) {
         this.code=code;
         this.msg=msg;
         this.count=count;
