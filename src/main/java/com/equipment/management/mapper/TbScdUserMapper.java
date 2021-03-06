@@ -27,5 +27,12 @@ public interface TbScdUserMapper extends BaseMapper<TbScdUser> {
      */
     IPage<TbScdUser> listPage(@Param("page") Page page, @Param("user") TbScdUser user);
 
+    @Select(" select id, user_name username, user_pwd password, real_name realName, user_sex userSex, user_role userRole, user_tel userTel, user_menu userMenu, create_time createTime, modify_time modifyTime, create_emp createEmp, modify_emp modifyEmp, is_valid isValid, remark from tb_scd_user where user_name = #{username}")
+    @Results({
+            @Result(id = true, property = "id", column = "id"),
+            @Result(property = "roles", column = "id", javaType = List.class,
+                    many = @Many(select = "com.equipment.management.mapper.TbScdRoleMapper.findByUid")
+            )
+    })
     MyUserDetails findByName(String username);
 }

@@ -38,8 +38,8 @@
                 </if>
             </where>
     </select>
-    <select id="findByName" resultType="com.equipment.management.entity.security.MyUserDetails">
-        select <include refid="Base_Column_List"/> from tb_scd_user where user_name=#{username}
-    </select>
+<!--    <select id="findByName" resultType="com.equipment.management.entity.security.MyUserDetails">-->
+<!--        select <include refid="Base_Column_List"/> from tb_scd_user where user_name=#{username}-->
+<!--    </select>-->
 
 </mapper>

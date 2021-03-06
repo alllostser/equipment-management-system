@@ -1,8 +1,9 @@
 package com.equipment.management.config;
 import com.equipment.management.filter.JwtLoginFilter;
 import com.equipment.management.filter.JwtVerifyFilter;
+import com.equipment.management.handler.JwtAccessDeniedHandler;
+import com.equipment.management.handler.JwtAuthenticationEntryPoint;
 import com.equipment.management.service.UserService;
-import com.equipment.management.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
@@ -63,23 +64,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/static/**");
     }
 
-
-    public static void main(String[] args) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        boolean matches = bCryptPasswordEncoder.matches("123456", "$2a$10$ysZUOe.iwbmb0SGegKBsROu18d135YOfRCJzybiEmFqoTTKMpXB4K");
-        System.out.println(matches);
-
-    }
     /**
      *  置SpringSecurity相关规则
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilter(new JwtLoginFilter(super.authenticationManager(), rsaKeyproperties))
-                .addFilter(new JwtVerifyFilter(super.authenticationManager(),rsaKeyproperties))
+        http.addFilter(new JwtLoginFilter(super.authenticationManager(), rsaKeyproperties,userService))
+                .addFilter(new JwtVerifyFilter(super.authenticationManager(),rsaKeyproperties,userService))
                 //禁用session
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                //认证异常处理
+                .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                // 授权异常处理
+                .accessDeniedHandler(new JwtAccessDeniedHandler())
                 .and()
                 .cors()
                 .and()
