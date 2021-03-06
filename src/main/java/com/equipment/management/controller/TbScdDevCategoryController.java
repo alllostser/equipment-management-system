@@ -6,8 +6,6 @@ import com.equipment.management.common.CategoryTableInfo;
 import com.equipment.management.common.Status;
 import com.equipment.management.common.TableDataInfo;
 import com.equipment.management.entity.TbScdDevCategory;
-import com.equipment.management.entity.TbScdUser;
-import com.equipment.management.entity.dto.TbScdDevCategoryDto;
 import com.equipment.management.entity.vo.TbScdDevCategoryVO;
 import com.equipment.management.service.TbScdDevCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

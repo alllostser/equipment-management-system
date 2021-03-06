@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.equipment.management.entity.TbScdUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Param;
+import com.equipment.management.entity.security.MyUserDetails;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -23,4 +26,6 @@ public interface TbScdUserMapper extends BaseMapper<TbScdUser> {
      * @return
      */
     IPage<TbScdUser> listPage(@Param("page") Page page, @Param("user") TbScdUser user);
+
+    MyUserDetails findByName(String username);
 }

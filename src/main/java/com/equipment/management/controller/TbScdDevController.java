@@ -100,7 +100,7 @@ public class TbScdDevController {
      * @return
      */
     @PostMapping("/application")
-    public R devApplication(TbscdApplyVO tbscdApplyVO){
+    public R devApplication(@RequestBody TbscdApplyVO tbscdApplyVO){
         R response = tbScdDevService.devApplication(tbscdApplyVO);
         return response;
     }

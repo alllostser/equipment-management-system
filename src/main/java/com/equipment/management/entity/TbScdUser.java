@@ -1,9 +1,11 @@
 package com.equipment.management.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -32,12 +34,14 @@ public class TbScdUser implements Serializable {
     /**
      * 用户名
      */
-    private String userName;
+    @TableField("user_name")
+    private String username;
 
     /**
      * 用户密码
      */
-    private String userPwd;
+    @TableField("user_pwd")
+    private String password;
 
     /**
      * 真实姓名
@@ -89,12 +93,12 @@ public class TbScdUser implements Serializable {
     /**
      * 是否有效 1：有效 0：无效
      */
-    private Integer isValid;
+    private Boolean isValid;
 
     /**
      * 备注
      */
     private String remark;
 
-
+    private List<TbScdRole> roles;
 }

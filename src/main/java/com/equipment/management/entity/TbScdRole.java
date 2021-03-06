@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * <p>
@@ -16,7 +17,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class TbScdRole implements Serializable {
+public class TbScdRole implements GrantedAuthority,Serializable {
 
     private static final long serialVersionUID=1L;
 
@@ -44,4 +45,8 @@ public class TbScdRole implements Serializable {
     private String description;
 
 
+    @Override
+    public String getAuthority() {
+        return roleName;
+    }
 }

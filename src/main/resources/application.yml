@@ -15,3 +15,8 @@ mybatis-plus:
   typeAliasesPackage: com.equipment.management.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+rsa:
+  key:
+    pubKeyFile: /key/public_key.txt
+    priKeyFile: /key/private_key.txt

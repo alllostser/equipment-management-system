@@ -5,8 +5,8 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.equipment.management.entity.TbScdUser">
         <id column="id" property="id" />
-        <result column="user_name" property="userName" />
-        <result column="user_pwd" property="userPwd" />
+        <result column="user_name" property="username" />
+        <result column="user_pwd" property="password" />
         <result column="real_name" property="realName" />
         <result column="user_sex" property="userSex" />
         <result column="user_role" property="userRole" />
@@ -24,7 +24,7 @@
     <sql id="Base_Column_List">
         id, user_name, user_pwd, real_name, user_sex, user_role, user_tel, user_menu, create_time, modify_time, create_emp, modify_emp, is_valid, remark
     </sql>
-    <select id="listPage" resultType="com.equipment.management.entity.TbScdUser">
+    <select id="listPage" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/> from tb_scd_user
             <where>
                 <if test="user.realName!=null and user.realName!=''">
@@ -37,6 +37,9 @@
                     and user_role = #{user.userRole}
                 </if>
             </where>
+    </select>
+    <select id="findByName" resultType="com.equipment.management.entity.security.MyUserDetails">
+        select <include refid="Base_Column_List"/> from tb_scd_user where user_name=#{username}
     </select>
 
 </mapper>

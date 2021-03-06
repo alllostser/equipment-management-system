@@ -54,12 +54,12 @@ public class TbScdUserController {
         if (ObjectUtils.isEmpty(tbScdUser.getId())){
             return R.failed("id不能为空");
         }
-        if (ObjectUtils.isEmpty(tbScdUser.getUserPwd())){
+        if (ObjectUtils.isEmpty(tbScdUser.getPassword())){
             String encode = bCryptPasswordEncoder.encode("123456");
-            tbScdUser.setUserPwd(encode);
+            tbScdUser.setPassword(encode);
         }else {
-            String encode = bCryptPasswordEncoder.encode(tbScdUser.getUserPwd());
-            tbScdUser.setUserPwd(encode);
+            String encode = bCryptPasswordEncoder.encode(tbScdUser.getPassword());
+            tbScdUser.setPassword(encode);
         }
         boolean update = tbScdUserService.updateById(tbScdUser);
         if (!update){
@@ -76,13 +76,13 @@ public class TbScdUserController {
     @PostMapping("/insert")
     public R insert(@RequestBody TbScdUser tbScdUser){
         tbScdUser.setCreateTime(LocalDateTime.now());
-        tbScdUser.setIsValid(1);
-        if (ObjectUtils.isEmpty(tbScdUser.getUserPwd())){
+        tbScdUser.setIsValid(true);
+        if (ObjectUtils.isEmpty(tbScdUser.getPassword())){
             String encode = bCryptPasswordEncoder.encode("123456");
-            tbScdUser.setUserPwd(encode);
+            tbScdUser.setPassword(encode);
         }else {
-            String encode = bCryptPasswordEncoder.encode(tbScdUser.getUserPwd());
-            tbScdUser.setUserPwd(encode);
+            String encode = bCryptPasswordEncoder.encode(tbScdUser.getPassword());
+            tbScdUser.setPassword(encode);
         }
         boolean save = tbScdUserService.save(tbScdUser);
         if (!save){
@@ -106,10 +106,10 @@ public class TbScdUserController {
     @GetMapping("/updateIsValid/{Id}")
     public R updateIsValid(@PathVariable Long Id){
         TbScdUser byId = tbScdUserService.getById(Id);
-        if (byId.getIsValid()==0){
-            byId.setIsValid(1);
+        if (byId.getIsValid()==false){
+            byId.setIsValid(true);
         }else {
-            byId.setIsValid(0);
+            byId.setIsValid(false);
         }
         boolean b = tbScdUserService.updateById(byId);
         if (!b){
