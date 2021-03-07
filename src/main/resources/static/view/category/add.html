@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../component/pear/css/pear.css" />
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="mainBox">
+        <div class="main-container">
+            <div class="main-container">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">类别号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="cateNo" lay-verify="username" lay-reqtext="用户名不能为空" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">类别名称</label>
+                    <div class="layui-input-block">
+                        <input type="text"  name="title" lay-verify="required" autocomplete="off" placeholder="请输入姓名" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">父节点</label>
+                    不选为顶级节点
+                    <div id="parentId"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="user-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
+<script src="../../component/layui/layui.js"></script>
+<script src="../../component/pear/pear.js"></script>
+<script src="../../config/api.config.js"></script>
+<script>
+layui.use(['form','jquery','context','laydate','selectN','selectM'],function(){
+    let form = layui.form;
+    let $ = layui.jquery;
+    let laydate = layui.laydate;
+    const context = layui.context;
+    let selectN = layui.selectN;
+    let selectM = layui.selectM;
+    const token = sessionStorage.getItem('token');
+    var hostUrl = context.get("hostUrl")
+    //无限级分类-基本配置
+    var catIns1 = selectN({
+        //元素容器【必填】
+        elem: '#parentId'
+        ,search:[false,true]
+        //候选数据【必填】
+        ,headers:{'Authorization':token}
+        ,data: hostUrl+"/category/list3"
+    });
+    form.on('submit(user-save)', function(data){
+        console.log(data.field)
+        var pid = data.field.parentId
+        var str = pid.split(',')
+        console.log(str)
+        data.field.parentId=str[str.length - 2]
+        console.log(data.field)
+        $.ajax({
+            url:hostUrl+'/category/add',
+            data:JSON.stringify(data.field),
+            dataType:'json',
+            contentType:'application/json',
+            headers:{'Authorization':token},
+            type:'post',
+            success:function(result){
+                console.log(result.data)
+                if(result.data){
+                    layer.msg(result.msg,{icon:1,time:1000},function(){
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                        parent.layui.treetable.render({ treeColIndex: 1,
+                            treeSpid: 0,
+                            treeIdName: 'powerId',
+                            treePidName: 'parentId',
+                            skin:'line',
+                            method:'post',
+                            treeDefaultClose: true,
+                            toolbar:'#power-toolbar',
+                            elem: '#power-table',
+                            url: hostUrl+'/category/list2',
+                            headers:{'Authorization':token},
+                            page: false,
+                            cols: [
+                                [
+                                    {type: 'checkbox'},
+                                    {field: 'cateNo', minWidth: 200, title: '类别号'},
+                                    {field: 'title', title: '类别名称'},
+                                    {field: 'createTime', title: '创建日期'},
+                                    {field: 'isValid', title: '是否可用',templet:'#power-enable'},
+                                    {title: '操作',templet: '#power-bar', width: 150, align: 'center'}
+                                ]
+                            ]});
+                    });
+                }else{
+                    layer.msg(result.msg,{icon:2,time:1000});
+                }
+            }
+        })
+        return false;
+    });
+})
+</script>
+<script>
+</script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>用户管理</title>
+		<link rel="stylesheet" href="../../component/pear/css/pear.css" />
+		<style>
+
+		</style>
+	</head>
+	<body class="pear-container">
+		<div class="layui-card">
+			<div class="layui-card-body">
+				<form class="layui-form" action="">
+					<div class="layui-form-item">
+						<div class="layui-form-item layui-inline">
+							<label class="layui-form-label">申请人姓名</label>
+							<div class="layui-input-inline">
+								<input type="text" name="realName" placeholder="" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item layui-inline">
+							<label class="layui-form-label">设备名称</label>
+							<div class="layui-input-inline">
+								<input type="text" name="devName" placeholder="" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item layui-inline">
+							<label class="layui-form-label">角色</label>
+							<div class="layui-input-inline">
+								<select name="userRole" lay-verify="">
+									<option value="">请选择</option>
+									<option value="1">管理员</option>
+									<!--                            <option value="021" disabled>上海（禁用效果）</option>-->
+									<option value="2" >教师</option>
+									<option value="3" >学生</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item layui-inline">
+							<button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
+								<i class="layui-icon layui-icon-search"></i>
+								查询
+							</button>
+							<button type="reset" class="pear-btn pear-btn-md">
+								<i class="layui-icon layui-icon-refresh"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="layui-card">
+			<div class="layui-card-body">
+				<table id="user-table" lay-filter="user-table"></table>
+			</div>
+		</div>
+
+		<script type="text/html" id="user-toolbar">
+<!--			<button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">-->
+<!--		        <i class="layui-icon layui-icon-add-1"></i>-->
+<!--		        新增-->
+<!--		    </button>-->
+		    <button class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
+		        <i class="layui-icon layui-icon-delete"></i>
+		        删除
+		    </button>
+		</script>
+
+		<script type="text/html" id="user-bar">
+			{{#if (d.status == 0 || d.status==1) { }}
+			<button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-app"></i></button>
+			{{# }else if(d.status != 0){ }}
+			<button class="pear-btn pear-btn-md pear-btn-sm " disabled lay-event="edit"><i class="layui-icon layui-icon-app"></i></button>
+			{{# } }}
+		    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
+		</script>
+
+
+		<script type="text/html" id="user-sex">
+			{{#if (d.userSex == 1) { }}
+		    <span>男</span>
+		    {{# }else if(d.userSex == 2){ }}
+		    <span>女</span>
+		    {{# } }}
+		</script>
+		<script type="text/html" id="user-role">
+			{{#if (d.userRole == 1) { }}
+			<span class="layui-btn layui-btn-normal layui-btn-sm">管理员</span>
+			{{# }else if(d.userRole == 2){ }}
+			<span class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn">教师</span>
+			{{# }else if(d.userRole == 3){ }}
+			<span class="layui-btn layui-btn-normal layui-btn-warm">学生</span>
+			{{# } }}
+		</script>
+		<script type="text/html" id="user-status">
+			{{#if(d.status == 0){ }}
+			<span class="layui-badge layui-bg-orange">待审核</span>
+			{{#}else if(d.status == 1) { }}
+			<span class="layui-badge layui-bg-cyan">教师同意</span>
+			{{# }else if(d.status == 2){ }}
+			<span class="layui-badge layui-bg-green">已通过</span>
+			{{# }else if(d.status == 3){ }}
+			<span class="layui-badge layui-bg-red">未通过</span>
+			{{# }else if(d.status == 4){ }}
+			<span class="layui-badge layui-bg-blue">已归还</span>
+			{{# }else if(d.status == 5){ }}
+			<span class="layui-badge layui-bg-gray">已撤回</span>
+			{{# } }}
+		</script>
+<!--		<script type="text/html" id="user-login">-->
+<!--			{{#if (d.login == 0) { }}-->
+<!--		    <span>在线</span>-->
+<!--		    {{# }else if(d.sex == 1){ }}-->
+<!--		    <span>离线</span>-->
+<!--		    {{# } }}-->
+<!--		</script>-->
+
+<!--		<script type="text/html" id="user-createTime">-->
+<!--			{{layui.util.toDateString(d.createTime, 'yyyy-MM-dd')}}-->
+<!--		</script>-->
+
+		<script src="../../component/layui/layui.js"></script>
+		<script src="../../component/pear/pear.js"></script>
+		<script src="../../config/api.config.js"></script>
+		<script>
+			layui.use(['table', 'form', 'jquery','common','context'], function() {
+				let table = layui.table;
+				let form = layui.form;
+				let $ = layui.jquery;
+				let common = layui.common;
+				const context = layui.context;
+				var hostUrl = context.get("hostUrl");
+				const token = sessionStorage.getItem('token');
+				let MODULE_PATH = "application/";
+
+				let cols = [
+					[{
+							type: 'checkbox'
+						},
+						{
+							title: '申请编号',
+							field: 'applyNo',
+							align: 'center',
+							width: 100
+						},
+						{
+							title: '申请人',
+							field: 'realName',
+							align: 'center',
+							width: 80
+						},
+						{
+							title: '申请人角色',
+							field: 'realName',
+							align: 'center',
+							toolbar: '#user-role'
+						},
+						{
+							title: '设备编号',
+							field: 'devNo',
+							align: 'center',
+						},
+						{
+							title: '设备名称',
+							field: 'devName',
+							align: 'center',
+						},
+						{
+							title: '设备规格',
+							field: 'standard',
+							width: 100,
+							align: 'center'
+						},
+						{
+							title: '申请数量',
+							field: 'devNum',
+							//width: 130,
+							align: 'center'
+						},
+						{
+							title: '申请理由',
+							field: 'applyText',
+							//width: 130,
+							align: 'center'
+						},
+						{
+							title: '申请时间',
+							field: 'applyTime',
+							//width: 130,
+							align: 'center'
+						},
+						{
+							title: '审核人',
+							field: 'dealName',
+							width: 80,
+							align: 'center'
+						},
+						{
+							title: '审核时间',
+							field: 'dealTime',
+							//width: 130,
+							align: 'center'
+						},
+						{
+							title: '处理意见',
+							field: 'dealText',
+							//width: 130,
+							align: 'center'
+						},
+						{
+							title: '状态',
+							field: 'status',
+							width: 85,
+							toolbar: '#user-status',
+							align: 'center'
+						},
+						{
+							title: '操作',
+							toolbar: '#user-bar',
+							align: 'center',
+							width: 130
+						}
+					]
+				]
+
+				table.render({
+					elem: '#user-table',
+					url: hostUrl+'/apply/list',
+					request: {
+						pageName: 'current' ,//页码的参数名称，默认：page
+						limitName: 'size' //每页数据量的参数名，默认：limit
+					},
+					headers:{'Authorization':token},
+					page: true,
+					cols: cols,
+					skin: 'line',
+					toolbar: '#user-toolbar',
+					defaultToolbar: [{
+						layEvent: 'refresh',
+						icon: 'layui-icon-refresh',
+					}, 'filter', 'print', 'exports']
+				});
+				form.on('switch(user-enable)', function(obj) {
+						console.log(obj)
+					//layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
+					$.ajax({
+						url: hostUrl + "/user/updateIsValid/" + this.value,
+						dataType: 'json',
+						headers:{'Authorization':token},
+						type: 'get',
+						success: function(result) {
+						}
+					})
+				});
+				table.on('toolbar(user-table)', function(obj) {
+					if (obj.event === 'refresh') {
+						window.refresh();
+					} else if (obj.event === 'batchRemove') {
+						window.batchRemove(obj);
+					}
+				});
+
+				table.on('tool(user-table)', function(obj) {
+					if (obj.event === 'remove') {
+						window.remove(obj);
+					} else if (obj.event === 'edit') {
+						window.edit(obj);
+					}
+				});
+
+				form.on('submit(user-query)', function(data) {
+					table.reload('user-table', {
+						url: hostUrl+'/apply/list',
+						method: "get",
+						page: {
+							current: 1
+						},
+						headers:{'Authorization':token},
+						where: {
+							realName: data.field.realName,
+							devName: data.field.devName,
+							userRole: data.field.userRole
+						}
+					})
+					return false;
+				});
+
+
+				window.edit = function(obj) {
+					var data = obj.data
+					json = JSON.stringify(data);
+					layer.open({
+						type: 2,
+						title: '审核',
+						shade: 0.1,
+						area: ['500px', '400px'],
+						content: MODULE_PATH + 'application.html'
+					});
+				}
+
+				window.remove = function(obj) {
+					layer.confirm('确定要删除该记录', {
+						icon: 3,
+						title: '提示'
+					}, function(index) {
+						layer.close(index);
+						let loading = layer.load();
+						$.ajax({
+							url: hostUrl+"/apply/delete/"+ obj.data['id'],
+							dataType: 'json',
+							headers:{'Authorization':token},
+							type: 'delete',
+							success: function(result) {
+								layer.close(loading);
+								if (result.code==0) {
+									layer.msg(result.msg, {
+										icon: 1,
+										time: 1000
+									}, function() {
+										obj.del();
+									});
+								} else {
+									layer.msg(result.msg, {
+										icon: 2,
+										time: 1000
+									});
+								}
+							}
+						})
+					});
+				}
+
+				window.batchRemove = function(obj) {
+					
+					var checkIds = common.checkField(obj,'id');
+					
+					if (checkIds === "") {
+						layer.msg("未选中数据", {
+							icon: 3,
+							time: 1000
+						});
+						return false;
+					}
+					
+					layer.confirm('确定要删除这些记录', {
+						icon: 3,
+						title: '提示'
+					}, function(index) {
+						layer.close(index);
+						let loading = layer.load();
+						$.ajax({
+							url: hostUrl+"/apply/delete/" + checkIds,
+							dataType: 'json',
+							type: 'delete',
+							headers:{'Authorization':token},
+							success: function(result) {
+								layer.close(loading);
+								if (result.code==0) {
+									layer.msg(result.msg, {
+										icon: 1,
+										time: 1000
+									}, function() {
+										table.reload('user-table');
+									});
+								} else {
+									layer.msg(result.msg, {
+										icon: 2,
+										time: 1000
+									});
+								}
+							}
+						})
+					});
+				}
+
+				window.refresh = function(param) {
+					table.reload('user-table');
+				}
+			})
+		</script>
+	</body>
+</html>

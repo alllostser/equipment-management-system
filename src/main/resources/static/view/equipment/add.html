@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../component/pear/css/pear.css" />
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="mainBox">
+        <div class="main-container">
+
+            <div class="layui-form-item"  >
+                <button type="button"  class="layui-input-block layui-btn" id="excel">
+                    <i class="layui-icon">&#xe67c;</i>Excel导入
+                </button>
+                <span class="layui-progress layui-progress-big" id="demo" lay-filter="demo" lay-showPercent="true" style='display: inline-block;width: 60%'>
+                    <span class="layui-progress-bar layui-bg-blue" lay-percent="0%"></span>
+                </span>
+            </div>
+            <div class="layui-form-item">
+                    <label class="layui-form-label">设备编号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="devNo" lay-verify="newsTitle" lay-reqtext="公告标题" autocomplete="off"  class="layui-input">
+                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">设备名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="devName" lay-verify="newsTitle" lay-reqtext="公告标题" autocomplete="off"  class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">型号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="modelNo" lay-verify="newsTitle" lay-reqtext="公告标题" autocomplete="off"  class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">规格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="standard" lay-verify="newsTitle" lay-reqtext="公告标题" autocomplete="off"  class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">单价</label>
+                <div class="layui-input-block">
+                    <input type="number" name="price" lay-verify="newsTitle" lay-reqtext="公告标题" autocomplete="off"  class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">数量</label>
+                <div class="layui-input-block">
+                    <input type="number" name="devSum" lay-verify="newsTitle" lay-reqtext="公告标题" autocomplete="off"  class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">类别</label>
+                <div id="cateId"></div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="user-save">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">
+                <i class="layui-icon layui-icon-refresh"></i>
+                重置
+            </button>
+        </div>
+    </div>
+</form>
+<script src="../../component/layui/layui.js"></script>
+<script src="../../component/pear/pear.js"></script>
+<script src="../../config/api.config.js"></script>
+<script>
+    layui.use(['form','jquery','context','laydate','selectN','selectM','upload','element'],function(){
+        let form = layui.form;
+        let $ = layui.jquery;
+        let laydate = layui.laydate;
+         let selectN = layui.selectN;
+         let selectM = layui.selectM;
+         let upload=layui.upload;
+        var element = layui.element;
+        const context = layui.context;
+        const token = sessionStorage.getItem('token');
+        var hostUrl = context.get("hostUrl")
+        var catData = [{"id":1,"name":"周边旅游","children":[{"id":24,"name":"广东","status":0,"children":[{"id":7,"name":"广州"},{"id":23,"name":"潮州"}]}]},{"id":5,"name":"国内旅游","children":[{"id":8,"name":"华北地区","children":[{"id":9,"name":"北京"}]}]},{"id":6,"name":"出境旅游","children":[{"id":10,"name":"东南亚","children":[{"id":11,"name":"马来西亚","children":[{"id":20,"name":"沙巴","children":[{"id":21,"name":"美人鱼岛","children":[{"id":22,"name":"潜水"}]}]}]}]}]}];
+        //无限级分类-基本配置
+        var catIns1 = selectN({
+            //元素容器【必填】
+            elem: '#cateId'
+            ,search:[false,true]
+            //候选数据【必填】
+            ,data: hostUrl+"/category/list3"
+            ,headers:{'Authorization':token}
+        });
+        upload.render({
+            elem: '#excel'
+            ,url: hostUrl+'/dev/importexcel'
+            ,headers:{'Authorization':token}
+            ,accept:'file'
+            ,field:'excelFile'
+            ,exts:'xls|XLSX|XLSB|XLSM|XLST'
+            ,progress: function(n, elem){
+                var percent = n + '%' //获取进度百分比
+                element.progress('demo', percent); //可配合 layui 进度条元素使用
+
+                //以下系 layui 2.5.6 新增
+                console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
+            }
+            ,done: function(res, index, upload){
+                //假设code=0代表上传成功
+                if(res.code == 0){
+                    layer.msg('导入成功', {
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                        //do something
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                        parent.layui.table.reload("organization-table");
+                    });
+                    //do something （比如将res返回的图片链接保存到表单的隐藏域）
+                }
+
+                //获取当前触发上传的元素，一般用于 elem 绑定 class 的情况，注意：此乃 layui 2.1.0 新增
+                var item = this.item;
+
+                //文件保存失败
+                //do something
+            }
+        });
+        form.on('submit(user-save)', function(data){
+            console.log(data.field)
+            $.ajax({
+                url:hostUrl+'/dev/add',
+                data:JSON.stringify(data.field),
+                dataType:'json',
+                headers:{'Authorization':token},
+                contentType:'application/json',
+                type:'post',
+                success:function(result){
+                    console.log(result.data)
+                    if(result.data){
+                        layer.msg(result.msg,{icon:1,time:1000},function(){
+                            parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                            parent.layui.table.reload("organization-table");
+                        });
+                    }else{
+                        layer.msg(result.msg,{icon:2,time:1000});
+                    }
+                }
+            })
+            return false;
+        });
+    })
+</script>
+<script>
+</script>
+</body>
+</html>
