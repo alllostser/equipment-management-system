@@ -9,12 +9,14 @@ import com.equipment.management.common.TableDataInfo;
 import com.equipment.management.entity.TbScdApply;
 import com.equipment.management.entity.TbScdApplyItem;
 import com.equipment.management.entity.dto.TbScdApplyDto;
+import com.equipment.management.entity.security.MyUserDetails;
 import com.equipment.management.entity.vo.TbscdApplyVO;
 import com.equipment.management.exception.CommonException;
 import com.equipment.management.service.TbScdApplyItemService;
 import com.equipment.management.service.TbScdApplyService;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,6 +66,10 @@ public class TbScdApplyController {
     @DeleteMapping("/delete/{ids}")
     @Transactional
     public R delete(@PathVariable String ids){
+        MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getUserRole()!=1){
+            return R.failed("权限不足");
+        }
         List<String> asids = Arrays.asList(ids.split(","));
         boolean b = tbScdApplyService.removeByIds(asids);
         if (!b){

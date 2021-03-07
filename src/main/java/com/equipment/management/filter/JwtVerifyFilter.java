@@ -7,6 +7,7 @@ import com.equipment.management.entity.security.Payload;
 import com.equipment.management.service.UserService;
 import com.equipment.management.utils.JwtUtils;
 import com.equipment.management.utils.ResultUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -56,14 +57,15 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter {
                                  HttpServletResponse response,
                                  FilterChain chain) throws IOException, ServletException {
         String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
-        String id = request.getHeader("id");
         if (token != null && !token.isEmpty()) {
             if (token.startsWith(SecurityConstants.TOKEN_PREFIX)) {
                 UsernamePasswordAuthenticationToken authentication = getAuthentication(token, response);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-            chain.doFilter(request, response);
+        }else {
+            SecurityContextHolder.clearContext();
         }
+        chain.doFilter(request, response);
     }
     /**
      *  获取用户认证信息 Authentication
@@ -83,7 +85,10 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 return userDetails.isEnabled() ? usernamePasswordAuthenticationToken : null;
             }
-        } catch (SignatureException  | MalformedJwtException | IllegalArgumentException | IOException exception) {
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        catch (SignatureException  | MalformedJwtException | IllegalArgumentException | IOException exception) {
             log.error("Request to parse JWT with invalid signature . Detail : " + exception.getMessage());
         } catch (ExpiredJwtException e) {
             log.error("Request to parse JWT with invalid signature . Detail : " + e.getMessage());

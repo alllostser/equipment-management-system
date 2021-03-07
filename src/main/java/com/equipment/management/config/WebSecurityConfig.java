@@ -85,10 +85,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 //配置需要放行的资源（即不需要认证就可以访问的资源）
-                .antMatchers("/login").permitAll()
+                .antMatchers("/login","/category/list2","/category/list3","/statistics/getDevApplicationNum","/statistics/getDevApplicationQuantity").permitAll()
                 //设定需要认证（登录）后才可以访问的资源
-                .antMatchers("/**").authenticated()
-
+//                .antMatchers("/**").authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login.html")  //指定登录页是"/login"
+                .and().headers().frameOptions().disable();
         ;
     }
 

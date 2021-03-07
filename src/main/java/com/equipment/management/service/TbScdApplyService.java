@@ -31,4 +31,12 @@ public interface TbScdApplyService extends IService<TbScdApply> {
      * @return
      */
     int updateStatusById(TbscdApplyVO tbScdApplyVO);
+
+    /**
+     * 获取个人申请列表
+     * @param page
+     * @param tbScdApplyDto
+     * @return
+     */
+    IPage<TbScdApplyDto> listPage2(Page<TbScdApplyDto> page, TbScdApplyDto tbScdApplyDto);
 }

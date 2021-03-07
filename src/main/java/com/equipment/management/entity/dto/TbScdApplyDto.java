@@ -25,7 +25,7 @@ public class TbScdApplyDto {
     private String devName;
     private Long devId;
     /**
-     * 申请状态 0待审核 ， 1教师已通过，2管理员已通过，3未通过
+     * 申请状态 0待审核 ， 1教师已通过，2管理员已通过，3未通过，4已归还，5已撤回
      */
     private Integer status;
 

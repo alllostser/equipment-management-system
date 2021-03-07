@@ -1,6 +1,7 @@
 package com.equipment.management.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 
 import java.awt.font.OpenType;
@@ -32,6 +33,9 @@ public class TbScdMenu implements Serializable {
     private String  icon;
     private String openType;
     private String href;
+    private Integer parentId;
+    private String roleId;
+    @TableField(exist = false)
     private List<TbScdMenu> children;
 
 }

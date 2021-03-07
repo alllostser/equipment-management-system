@@ -1,5 +1,5 @@
 package com.equipment.management.entity.security;
- 
+
 import com.equipment.management.entity.TbScdRole;
 import com.equipment.management.entity.TbScdUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,9 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+
 @Data
 public class MyUserDetails extends TbScdUser implements UserDetails, Serializable {
 
+    private List<TbScdRole> roles;
 
     /**
      * 添加用户拥有的权限和角色

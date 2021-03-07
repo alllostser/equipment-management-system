@@ -79,6 +79,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         result.put("code", HttpServletResponse.SC_OK);
         result.put("msg", "登陆成功");
         result.put("username", user.getUsername());
+        result.put("role", user.getUserRole());
         result.put("status", "successed");
         result.put("Authorization", "Bearer " + token);
         logger.info("用户：" + user.getUsername() + "成功登录");

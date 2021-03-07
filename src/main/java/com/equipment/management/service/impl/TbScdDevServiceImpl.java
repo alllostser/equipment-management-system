@@ -10,6 +10,7 @@ import com.equipment.management.common.TableDataInfo;
 import com.equipment.management.entity.TbScdApplyItem;
 import com.equipment.management.entity.TbScdDev;
 import com.equipment.management.entity.excel.ExcelForDev;
+import com.equipment.management.entity.security.MyUserDetails;
 import com.equipment.management.entity.vo.TbscdApplyVO;
 import com.equipment.management.exception.CommonException;
 import com.equipment.management.mapper.TbScdDevMapper;
@@ -17,6 +18,7 @@ import com.equipment.management.service.TbScdApplyItemService;
 import com.equipment.management.service.TbScdApplyService;
 import com.equipment.management.service.TbScdDevService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,8 +66,11 @@ public class TbScdDevServiceImpl extends ServiceImpl<TbScdDevMapper, TbScdDev> i
         long applyNo = snowflake.nextId();
         tbscdApplyVO.setApplyNo("AP"+String.valueOf(applyNo).substring(0,7));
         //todo: 当前登录用户
-        //TbScdUser user = (TbScdUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        tbscdApplyVO.setApplyEmp(4L);
+        MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        tbscdApplyVO.setApplyEmp(user.getId());
+        if (user.getUserRole()==1){
+            tbscdApplyVO.setStatus(2);
+        }
         tbscdApplyVO.setStatus(0);
         tbscdApplyVO.setApplyTime(LocalDateTime.now());
         tbscdApplyVO.setCreateTime(LocalDateTime.now());

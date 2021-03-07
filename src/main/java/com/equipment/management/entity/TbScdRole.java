@@ -3,6 +3,8 @@ package com.equipment.management.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
@@ -46,6 +48,7 @@ public class TbScdRole implements GrantedAuthority,Serializable {
 
 
     @Override
+    @JsonIgnore
     public String getAuthority() {
         return roleName;
     }

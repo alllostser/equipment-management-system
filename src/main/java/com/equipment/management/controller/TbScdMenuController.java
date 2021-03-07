@@ -3,6 +3,8 @@ package com.equipment.management.controller;
 
 import cn.hutool.json.JSONObject;
 import com.equipment.management.entity.TbScdMenu;
+import com.equipment.management.service.TbScdMenuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,25 +24,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/menu")
 public class TbScdMenuController {
+    @Autowired
+    private TbScdMenuService tbScdMenuService;
+
+    /**
+     * 获取菜单
+     * @return
+     */
     @GetMapping("/getMenu")
     public List<TbScdMenu> getMenu(){
-        List<TbScdMenu> menu = new ArrayList<>();
-        TbScdMenu tbScdMenu= new TbScdMenu();
-            tbScdMenu.setId(1);
-            tbScdMenu.setTitle("工作空间");
-            tbScdMenu.setType(0);
-            tbScdMenu.setIcon("layui-icon layui-icon-console");
-            List<TbScdMenu> scdMenus = new ArrayList<>();
-           TbScdMenu scdMenu = new TbScdMenu();
-                scdMenu.setId(10);
-                scdMenu.setTitle("控制后台");
-                scdMenu.setIcon("layui-icon layui-icon-console");
-                scdMenu.setType(1);
-                scdMenu.setOpenType("_iframe");
-                scdMenu.setHref("view/console/console1.html");
-                scdMenus.add(scdMenu);
-            tbScdMenu.setChildren(scdMenus);
-            menu.add(tbScdMenu);
+        List<TbScdMenu> menu = tbScdMenuService.getMenu();
         return menu;
     }
 }

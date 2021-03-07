@@ -1,11 +1,14 @@
 package com.equipment.management.controller;
 
 
+import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.equipment.management.common.TableDataInfo;
 import com.equipment.management.entity.TbScdUser;
+import com.equipment.management.entity.dto.TbScdApplyDto;
+import com.equipment.management.service.TbScdApplyService;
 import com.equipment.management.service.TbScdUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +35,8 @@ public class TbScdUserController {
     private TbScdUserService tbScdUserService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private TbScdApplyService tbScdApplyService;
 
     /**
      * 获取用户列表+模糊查询
@@ -75,7 +81,7 @@ public class TbScdUserController {
      */
     @PostMapping("/insert")
     public R insert(@RequestBody TbScdUser tbScdUser){
-        tbScdUser.setCreateTime(LocalDateTime.now());
+        tbScdUser.setCreateTime(new Date());
         tbScdUser.setIsValid(true);
         if (ObjectUtils.isEmpty(tbScdUser.getPassword())){
             String encode = bCryptPasswordEncoder.encode("123456");
@@ -116,6 +122,18 @@ public class TbScdUserController {
             return R.failed("修改失败");
         }
         return R.ok("修改成功");
+    }
+
+    /**
+     * 获取个人申请列表
+     * @param page
+     * @param tbScdApplyDto
+     * @return
+     */
+    @GetMapping("/myApplication")
+    public TableDataInfo myApplication(Page<TbScdApplyDto> page, TbScdApplyDto tbScdApplyDto){
+        IPage<TbScdApplyDto> iPage = tbScdApplyService.listPage2(page, tbScdApplyDto);
+        return TableDataInfo.ResponseBySucess("成功", iPage.getTotal(), iPage.getRecords());
     }
 }
 

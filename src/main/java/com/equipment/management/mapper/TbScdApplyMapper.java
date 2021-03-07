@@ -25,4 +25,12 @@ public interface TbScdApplyMapper extends BaseMapper<TbScdApply> {
      * @return
      */
     int updateStatusById(TbScdApply tbScdApply);
+
+    /**
+     * 获取个人申请列表
+     * @param page
+     * @param tbScdApplyDto
+     * @return
+     */
+    IPage<TbScdApplyDto> listPage2(Page<TbScdApplyDto> page, @Param("applyDto") TbScdApplyDto tbScdApplyDto,@Param("userId") Long userId);
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -72,13 +73,13 @@ public class TbScdUser implements Serializable {
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 修改时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    private LocalDateTime modifyTime;
+    private Date modifyTime;
 
     /**
      * 创建人
@@ -100,5 +101,4 @@ public class TbScdUser implements Serializable {
      */
     private String remark;
 
-    private List<TbScdRole> roles;
 }

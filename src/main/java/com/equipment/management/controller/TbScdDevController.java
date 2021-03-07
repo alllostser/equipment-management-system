@@ -8,12 +8,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.equipment.management.common.TableDataInfo;
 import com.equipment.management.entity.TbScdDev;
 import com.equipment.management.entity.excel.ExcelForDev;
+import com.equipment.management.entity.security.MyUserDetails;
 import com.equipment.management.entity.vo.TbScdDevVO;
 import com.equipment.management.entity.vo.TbscdApplyVO;
 import com.equipment.management.listener.ExcelListener;
 import com.equipment.management.service.TbScdDevService;
 import com.equipment.management.utils.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -78,6 +80,10 @@ public class TbScdDevController {
      */
     @DeleteMapping("/delete")
     public R delDev(String ids){
+        MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getUserRole()!=1){
+            return R.failed("权限不足");
+        }
         List<String> asids = Arrays.asList(ids.split(","));
         boolean b = tbScdDevService.deleteByIds(asids);
         return R.ok(b);
