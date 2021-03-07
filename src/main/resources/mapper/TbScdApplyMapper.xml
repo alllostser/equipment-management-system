@@ -72,6 +72,29 @@
         </where>
             order by status,apply_time desc
     </select>
+    <select id="listPage2" resultMap="BaseResultMap2">
+        select <include refid="Base_Column_List2"/>
+        from tb_scd_apply apply
+        left join tb_scd_apply_item item
+        on apply.id = item.apply_id
+        left join tb_scd_dev dev
+        on item.dev_id=dev.id
+        left join tb_scd_user user
+        on apply.apply_emp=user.id
+        <where>
+            apply.apply_emp=#{userId}
+            <if test="applyDto.userRole != null and applyDto.userRole !=''">
+               and user.user_role = #{applyDto.userRole}
+            </if>
+            <if test="applyDto.realName !=null and applyDto.realName!=''">
+                and user.real_name like CONCAT('%',#{applyDto.realName},'%')
+            </if>
+            <if test="applyDto.devName!=null and applyDto.devName!=''">
+                and dev.dev_name like CONCAT('%',#{applyDto.devName},'%')
+            </if>
+        </where>
+        order by status,apply_time desc
+    </select>
     <update id="updateStatusById">
         update tb_scd_apply set deal_text = #{dealText},deal_time=#{dealTime},deal_emp=#{dealEmp},status=#{status}
         where id = #{id}

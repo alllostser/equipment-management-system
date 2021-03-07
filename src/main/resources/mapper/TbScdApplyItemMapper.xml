@@ -21,5 +21,25 @@
     <sql id="Base_Column_List">
         id, item_no, dev_id, dev_num, remark, create_time, modify_time, create_emp, modify_emp, is_valid, apply_id
     </sql>
+    <select id="getDevApplicatinNum" resultType="java.util.Map">
+        select dev_name devName,count(1) count
+        from tb_scd_apply_item item
+        left join tb_scd_dev dev
+        on item.dev_id=dev.id
+            left join tb_scd_apply apply
+            on item.apply_id = apply.id
+        where apply.status =2 or apply.status =4
+        group by item.dev_id
+    </select>
+    <select id="getDevApplicatinQuantity" resultType="java.util.Map">
+        select dev_name devName,sum(item.dev_num) sum
+        from tb_scd_apply_item item
+            left join tb_scd_dev dev
+        on item.dev_id=dev.id
+            left join tb_scd_apply apply
+            on item.apply_id = apply.id
+        where apply.status =2 or apply.status =4
+        group by item.dev_id
+    </select>
 
 </mapper>
